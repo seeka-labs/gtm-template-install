@@ -1,5 +1,5 @@
 homepage: "https://seeka.co"
 documentation: "https://support.seeka.co"
 versions:
-- sha: ffe980440455ab6beca65a7e3c681fc8fe646678
+- sha: 241e103ae2203eef71e6470f545b4f0a58b371e4
   changeNotes: Initial release.
