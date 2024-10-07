@@ -73,7 +73,6 @@ ___TEMPLATE_PARAMETERS___
     "displayName": "Hostname filters",
     "simpleValueType": true,
     "textAsList": true,
-    "valueValidators": [],
     "canBeEmptyString": false,
     "notSetText": "No hostnames set - Seeka will be installed on all hostnames that your GTM container is installed on.",
     "help": "Restrict installation of Seeka by hostname by placing a single hostname per line in this setting.",
@@ -91,21 +90,21 @@ const injectScript = require('injectScript');
 const getUrl = require('getUrl');
 const getTimestampMillis = require('getTimestampMillis');
 const logToConsole = require('logToConsole');
+const encodeUriComponent = require('encodeUriComponent');
+const encodeUri = require('encodeUri');
 
 const host = getUrl('host').toLowerCase();
 
 
 const hostnameFilters = data.seekaHostnameFilters;
 if(hostnameFilters && hostnameFilters.length > 0 && hostnameFilters.filter(function(h) { return h.toLowerCase() === host; }).length === 0){
-  //if(host !== "tagmanager.googleusercontent.com"){  
     logToConsole('Hostname filter setting prevents running on ' + host + '. Allowed hostnames: ' + hostnameFilters.join(', '));
     data.gtmOnSuccess();  
     return;
-  //}
 }
 
 if (data.seekaInstanceId && data.seekaPublicKey) {
-  var scriptUrl = "https://sdk.seeka.services/static/c/" + data.seekaInstanceId + ".js?k=" + data.seekaPublicKey + "&vo=" + (data.seekaSdkVersion || "latest");
+  var scriptUrl = "https://sdk.seeka.services/static/c/" + encodeUri(data.seekaInstanceId) + ".js?k=" + encodeUriComponent(data.seekaPublicKey) + "&vo=" + encodeUriComponent(data.seekaSdkVersion || "latest");
   
   // Cache bust
   const query = getUrl('query');
@@ -221,7 +220,7 @@ scenarios:
     const mockData = {
       seekaInstanceId: "7c8660c5e7c77256fdc03a0ccffec13c",
       seekaPublicKey: "sdkr_Q2ZESjhPWkNZdzdQRGdSQXU4VWZjV0c3TmdIdEgzTnhneWY4V01lRV9RajNWaHNnSVJZa0FnUXJDbUhHbm9reDhMTzZFSEw2ZzNQdzRyQkNxekgwWFg5QXg1V3QxYmRlQVFZc19RSEpNX2xsMlNwb3lGb1hJcF9wNGxJLWQ4dkVPaWUwcy1xVzU1OHFxQTV2d3BCdFlOMkYwb1ItWFNqTWViRjRPcHh2ekpRSERYLXE",
-      seekaSdkVersion: "alpha",
+      seekaSdkVersion: "latest",
       seekaHostnameFilters: ["test.com", "tagmanager.googleusercontent.com"]
     };
 
@@ -234,6 +233,6 @@ scenarios:
 
 ___NOTES___
 
-Created on 10/4/2024, 1:30:50 PM
+Created on 10/7/2024, 11:52:20 AM
 
 
